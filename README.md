@@ -1,4 +1,4 @@
-self installing and running postgres and a python script with sqlalchemy
+runs postgres and a python script with sqlalchemy as docker containers
 
 requires `docker` 
 
