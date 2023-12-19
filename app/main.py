@@ -20,7 +20,7 @@ class Animals(Base):
     name = db.Column(db.Text)
     age = db.Column(db.Integer)
 
-#Animals.__table__.create(bind=engine, checkfirst=True)
+Animals.__table__.create(bind=engine, checkfirst=True)
 
 rand_id = random.randint(0, 10000)
 ins = (
