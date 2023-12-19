@@ -6,7 +6,9 @@ to run execute the file run.sh
 `sh run.sh`
 this rebuilds the docker container containing the python script in app/ and prints out an example record
 
-this will create one volume and two container 
+this will create one volume and two containers
+
+
 review these with 
 
 `docker container ls`
