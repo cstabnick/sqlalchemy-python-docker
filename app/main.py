@@ -1,6 +1,7 @@
 import sqlalchemy as db
 from sqlalchemy.orm import declarative_base
 import time
+import random
 
 Base = declarative_base()
 
@@ -19,15 +20,16 @@ class Animals(Base):
     name = db.Column(db.Text)
     age = db.Column(db.Integer)
 
-Animals.__table__.drop(bind=engine, checkfirst=True)
-Animals.__table__.create(bind=engine)
+#Animals.__table__.create(bind=engine, checkfirst=True)
 
+rand_id = random.randint(0, 10000)
 ins = (
     db.insert(Animals).
-    values(id = 1, name="test")
+    values(id = rand_id, name=f"test {rand_id}")
 )
 sel = db.select(Animals)
 
 with engine.connect() as conn:
     conn.execute(ins)
     print(conn.execute(sel).fetchall())
+    conn.commit()
