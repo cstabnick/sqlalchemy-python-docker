@@ -1,35 +1,30 @@
-import sqlalchemy as db
+
 from sqlalchemy.orm import declarative_base
+from sqlalchemy import (Column, Text, Integer, insert, select)
 import time
 import random
 
+from util.db import DB
+
 Base = declarative_base()
 
-while True:
-    try:
-        engine = db.create_engine('postgresql+psycopg2://admin:fish123@psql/mydb')
-        break
-    except Exception:
-        # while db spin up, may fail the first run before db created
-        print("Failed to connect, trying again")
-        time.sleep(1)
 
 class Animals(Base):
     __tablename__ = 'animals'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text)
-    age = db.Column(db.Integer)
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+    age = Column(Integer)
 
-Animals.__table__.create(bind=engine, checkfirst=True)
+Animals.__table__.create(bind=DB.get_engine(), checkfirst=True)
 
 rand_id = random.randint(0, 10000)
 ins = (
-    db.insert(Animals).
+    insert(Animals).
     values(id = rand_id, name=f"test {rand_id}")
 )
-sel = db.select(Animals)
+sel = select(Animals)
 
-with engine.connect() as conn:
+with DB.get_engine().connect() as conn:
     conn.execute(ins)
     print(conn.execute(sel).fetchall())
     conn.commit()

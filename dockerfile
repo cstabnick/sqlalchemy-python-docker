@@ -1,11 +1,9 @@
-FROM alpine as deps
+FROM alpine as install
 run apk add python3 
 run apk add py3-pip
+run apk add py3-psycopg2
+run apk add py3-sqlalchemy
 
-from deps as install
-COPY ./setup /setup
-workdir /setup
-run pip install -r /setup/requirements.txt
 
 from install as base 
 COPY ./app /app
