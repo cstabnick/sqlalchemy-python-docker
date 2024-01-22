@@ -1,6 +1,6 @@
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import (Engine, create_engine) 
-from util.log import Log 
+from sqlalchemy import Engine, create_engine
+from util.log import Log
 from time import sleep
 
 Base = declarative_base()
@@ -8,12 +8,13 @@ Base = declarative_base()
 
 class DB:
     __engine__: Engine = None
-    
+
     @classmethod
     def get_engine(cls):
         if cls.__engine__ is None:
-
-            cls.__engine__ = create_engine('postgresql+psycopg2://admin:fish123@psql/mydb')
+            cls.__engine__ = create_engine(
+                "postgresql+psycopg2://admin:fish123@psql/mydb"
+            )
 
             # test connection
             while True:
@@ -28,18 +29,18 @@ class DB:
 
         return cls.__engine__
 
-    @classmethod 
+    @classmethod
     def select_many(cls, select_statement):
         with cls.get_engine().connect() as conn:
             return conn.execute(select_statement).fetchall()
-        
-    @classmethod 
+
+    @classmethod
     def insert_one(cls, insert_statement):
         with cls.get_engine().connect() as conn:
             conn.execute(insert_statement)
             conn.commit()
 
-    @classmethod 
+    @classmethod
     def insert_many(cls, insert_statements):
         with cls.get_engine().connect() as conn:
             for insert_statement in insert_statements:
