@@ -1,6 +1,9 @@
-from sqlalchemy import (Engine, create_engine) 
+from sqlalchemy import (Engine, create_engine, declarative_base) 
 from util.log import Log 
 from time import sleep
+
+Base = declarative_base()
+
 
 class DB:
     __engine__: Engine = None
@@ -21,8 +24,5 @@ class DB:
                 except Exception as ex:
                     Log.exception(ex)
                     sleep(1)
-                
-
 
         return cls.__engine__
-    
