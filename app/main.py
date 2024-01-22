@@ -1,6 +1,6 @@
 
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import (Column, Text, Integer, insert, select)
+from sqlalchemy import (Column, Text, Integer, insert, select, engine)
 import time
 import random
 
@@ -24,7 +24,6 @@ ins = (
 )
 sel = select(Animals)
 
-with DB.get_engine().connect() as conn:
-    conn.execute(ins)
-    print(conn.execute(sel).fetchall())
-    conn.commit()
+
+DB.insert_one(ins)
+print(DB.select_many(sel))

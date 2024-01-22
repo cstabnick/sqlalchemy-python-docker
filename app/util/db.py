@@ -1,4 +1,5 @@
-from sqlalchemy import (Engine, create_engine, declarative_base) 
+from sqlalchemy.orm import declarative_base
+from sqlalchemy import (Engine, create_engine) 
 from util.log import Log 
 from time import sleep
 
@@ -26,3 +27,21 @@ class DB:
                     sleep(1)
 
         return cls.__engine__
+
+    @classmethod 
+    def select_many(cls, select_statement):
+        with cls.get_engine().connect() as conn:
+            return conn.execute(select_statement).fetchall()
+        
+    @classmethod 
+    def insert_one(cls, insert_statement):
+        with cls.get_engine().connect() as conn:
+            conn.execute(insert_statement)
+            conn.commit()
+
+    @classmethod 
+    def insert_many(cls, insert_statements):
+        with cls.get_engine().connect() as conn:
+            for insert_statement in insert_statements:
+                conn.execute(insert_statement)
+            conn.commit()
