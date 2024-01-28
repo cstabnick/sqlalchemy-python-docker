@@ -1,11 +1,16 @@
-FROM alpine as install
-run apk add python3 
-run apk add py3-pip
-run apk add py3-psycopg2
-run apk add py3-sqlalchemy
+FROM debian:bookworm-slim as install
+RUN apt update 
+RUN apt install git bash build-essential libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev libsqlite3-dev curl libncursesw5-dev \
+    xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev \
+    -y
+RUN curl https://pyenv.run | bash
+RUN /root/.pyenv/bin/pyenv install 3.11.7
 
+FROM install as pip
+RUN 
 
-from install as base 
+FROM install as base 
 COPY ./app /app
-workdir /app
-cmd python3 main.py
+WORKDIR /app
+CMD /root/.pyenv/versions/3.11.7/bin/python3 main.py
