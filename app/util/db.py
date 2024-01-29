@@ -3,18 +3,20 @@ from sqlalchemy import Engine, create_engine
 from util.log import Log
 from time import sleep
 from models.user import Users 
+from models.service import Services 
 
 Base = declarative_base()
 
 
 class DB:
     __engine__: Engine = None
-    __session_func__: sessionmaker() = None
+    __session_func__ = None
 
     @classmethod
     def ensure_model_tables(cls):
-        print("doing tables")
+        print("Creating tables")
         Users.__table__.create(bind=cls.get_engine(), checkfirst=True)
+        Services.__table__.create(bind=cls.get_engine(), checkfirst=True)
         return 
         
     @classmethod
@@ -41,21 +43,3 @@ class DB:
             
 
         return cls.__engine__
-
-    @classmethod
-    def select_many(cls, select_statement):
-        with cls.get_engine().connect() as conn:
-            return conn.execute(select_statement).fetchall()
-
-    @classmethod
-    def insert_one(cls, insert_statement):
-        with cls.get_engine().connect() as conn:
-            conn.execute(insert_statement)
-            conn.commit()
-
-    @classmethod
-    def insert_many(cls, insert_statements):
-        with cls.get_engine().connect() as conn:
-            for insert_statement in insert_statements:
-                conn.execute(insert_statement)
-            conn.commit()
