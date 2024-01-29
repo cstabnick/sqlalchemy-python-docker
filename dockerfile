@@ -6,11 +6,17 @@ RUN apt install git bash build-essential libssl-dev zlib1g-dev \
     -y
 RUN curl https://pyenv.run | bash
 RUN /root/.pyenv/bin/pyenv install 3.11.7
+RUN cp /root/.pyenv/versions/3.11.7/bin/pip /usr/bin
+RUN cp /root/.pyenv/versions/3.11.7/bin/python /usr/bin
 
-FROM install as pip
-RUN 
+FROM install as pip 
+RUN /root/.pyenv/versions/3.11.7/bin/pip install sqlalchemy fastapi
+RUN pip install "uvicorn[standard]"
+RUN ln -s /root/.pyenv/versions/3.11.7/bin/uvicorn /usr/bin
+RUN pip install psycopg2-binary
 
-FROM install as base 
-COPY ./app /app
+FROM pip as base 
+# expects the /app dir to be mounted in the compose file
+# COPY ./app /app 
 WORKDIR /app
-CMD /root/.pyenv/versions/3.11.7/bin/python3 main.py
+CMD ["uvicorn",  "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
