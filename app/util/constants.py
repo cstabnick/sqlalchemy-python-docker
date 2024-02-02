@@ -1,0 +1,1 @@
+C_DEFAULT_CONNECTION_STRING = "postgresql+psycopg2://admin:fish123@psql/mydb"
